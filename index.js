@@ -37,10 +37,42 @@ client.on('message', msg => {
     console.error(err);
 });
 
+  } else if (command==="randomnumber") {
+    if(!args[0]) return msg.reply("Please select your limit. for example : !randomnumber 0 15");
+    if(!args[1]) return msg.reply("You gave only one limit, gives the other.");
+    let  min = Math.ceil(args[0]);
+    let  max = Math.floor(args[1]);
+    let number = Math.floor(Math.random() * (max - min)) + min;
+
+
+
+    msg.channel.send(`Okay, find a number betweene ${min} and ${max}`);
+
+    let counter = 0;
+
+    var collector = new Discord.MessageCollector(msg.channel, m => m.author.id === msg.author.id);
+
+    collector.on('collect', msg => {
+         if (msg.content < number) {
+             msg.channel.send("it's more");
+             counter += 1
+         } else if (msg.content > number ) {
+             msg.channel.send("it's less");
+             counter += 1
+         } else if (msg.content == number)  {
+           counter += 1
+           msg.channel.send(`Well done, you won in ${counter} moves.`)
+            return collector.stop();
+         } else if (msg.content === "stop") {
+  
+           msg.channel.send("game stopped")
+           return collector.stop();
+         } 
+       })
+  
   }
 
   })
-
 
 
 
