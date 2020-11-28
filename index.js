@@ -1,6 +1,8 @@
 const Discord = require('discord.js');
 const client = new Discord.Client();
 const translate = require('@vitalets/google-translate-api');
+const moment = require("moment");
+require("moment-duration-format");
 
 client.on('ready', () => {
   console.log(`Logged in as ${client.user.tag}!`);
@@ -17,6 +19,7 @@ const prefix = "!"
 client.on('message', msg => {
   const args = msg.content.slice(prefix.length).trim().split(' ');
   const command = args.shift().toLowerCase();
+  
   if (command === "translate") {
 
     
@@ -29,7 +32,6 @@ client.on('message', msg => {
     const result = res.text
  
     msg.channel.send(result);
-
 
 
 
@@ -70,10 +72,15 @@ client.on('message', msg => {
          } 
        })
   
-  }
+  } else if (command === "uptime") {
 
+const duration = moment.duration(client.uptime).format(" D [days], H [hrs], m [mins], s [secs]");
+msg.channel.send(`uptime : ${duration}`)
+
+console.log(duration);
+
+  }
+ 
   })
 
-
-
-client.login(token);
+client.login();  
