@@ -1,8 +1,8 @@
 {
-  "name": "Discord_bot",
+  "name": "discord_bot",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "music.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -10,8 +10,14 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@discordjs/opus": "^0.3.3",
     "@vitalets/google-translate-api": "^4.0.0",
+    "alpha2-countries": "^1.1.0",
     "discord.js": "^12.5.1",
-    "moment": "^2.29.1"
+    "ffmpeg-static": "^4.2.7",
+    "iso-639-1": "^2.1.4",
+    "moment": "^2.29.1",
+    "yt-search": "^2.5.1",
+    "ytdl-core": "^4.2.1"
   }
 }
