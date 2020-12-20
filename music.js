@@ -23,7 +23,7 @@ if(command==="join") {
     if(!Channel_check ) return msg.reply ("Vous devez être dans channel vocal.")
     
      connection
-     connection.setDeaf(true)
+     Channel_check.setDeaf(true)
     msg.channel.send(`Joined ${msg.member.voice.channel.name}`)
     
 
@@ -47,4 +47,4 @@ if(command==="play") {
 })
 
 
-client.login(token);  
+client.login("NzgxOTIwNTE0NDQ4OTQ5MzIw.X8EqOg.46oPPnUfoU_mQAGtphU1r9tlF40");  
