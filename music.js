@@ -22,7 +22,7 @@ if(command==="join") {
 
     if(!Channel_check ) return msg.reply ("Vous devez être dans channel vocal.")
     
-     connection.join()
+     connection
      connection.setDeaf(true)
     msg.channel.send(`Joined ${msg.member.voice.channel.name}`)
     
