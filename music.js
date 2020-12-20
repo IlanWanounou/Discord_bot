@@ -47,4 +47,4 @@ if(command==="play") {
 })
 
 
-client.login("NzgxOTIwNTE0NDQ4OTQ5MzIw.X8EqOg.46oPPnUfoU_mQAGtphU1r9tlF40");  
+client.login(token);  
