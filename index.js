@@ -1,86 +1,128 @@
 const Discord = require('discord.js');
+const ytdl = require('ytdl-core');
+ Discord.Constants.DefaultOptions.ws.properties.$browser = "Discord Android"
+//const { YTSearcher } = require('ytsearcher');
+ 
+/*const searcher = new YTSearcher({
+    key: "AIzaSyA3CWSH2xiML9aUqSURM5DlwDUGTjTNLjU",
+    revealed: true
+});*/
+ 
 const client = new Discord.Client();
-const translate = require('@vitalets/google-translate-api');
-const moment = require("moment");
-require("moment-duration-format");
+ 
+const queue = new Map();
 
 client.on('ready', () => {
-  console.log(`Logged in as ${client.user.tag}!`);
-});
+    /*console.log(`Logged in as ${client.user.tag}!`);
 
-client.on('message', msg => {
-  if (msg.content.toLowerCase() === 'ping') {
-    msg.reply('Pong!');
-  } 
-});
+client.user.setPresence({ activity: { name: 'with discord.js' }, status: 'idle' })
+.then(console.log)
+.catch(console.error);*/
+  });
 
-const prefix = "!"
 
-client.on('message', msg => {
-  const args = msg.content.slice(prefix.length).trim().split(' ');
-  const command = args.shift().toLowerCase();
-  
-  if (command === "translate") {
 
-    
-
-  if(!args[0]) return msg.channel.send("Please give the language and the text to translate.");
-  if(!args[1]) return msg.channel.send("Please give the text to translate.");
-  let traduction = args.slice(1).join(" ");
-
-  translate(traduction, {to: `${args[0]}`}).then(res => {
-    const result = res.text
+client.on("message", async(message) => {
+    const prefix = '?';
+    if (!message.content.startsWith(prefix)) return;
+    const serverQueue = queue.get(message.guild.id);
  
-    msg.channel.send(result);
-
-
-
-}).catch(err => {
-    console.error(err);
-});
-
-  } else if (command==="randomnumber") {
-    if(!args[0]) return msg.reply("Please select your limit. for example : !randomnumber 0 15");
-    if(!args[1]) return msg.reply("You gave only one limit, gives the other.");
-    let  min = Math.ceil(args[0]);
-    let  max = Math.floor(args[1]);
-    let number = Math.floor(Math.random() * (max - min)) + min;
-
-
-
-    msg.channel.send(`Okay, find a number betweene ${min} and ${max}`);
-
-    let counter = 0;
-
-    var collector = new Discord.MessageCollector(msg.channel, m => m.author.id === msg.author.id);
-
-    collector.on('collect', msg => {
-         if (msg.content < number) {
-             msg.channel.send("it's more");
-             counter += 1
-         } else if (msg.content > number ) {
-             msg.channel.send("it's less");
-             counter += 1
-         } else if (msg.content == number)  {
-           counter += 1
-           msg.channel.send(`Well done, you won in ${counter} moves.`)
-            return collector.stop();
-         } else if (msg.content === "stop") {
-  
-           msg.channel.send("game stopped")
-           return collector.stop();
-         } 
-       })
-  
-  } else if (command === "uptime") {
-
-const duration = moment.duration(client.uptime).format(" D [days], H [hrs], m [mins], s [secs]");
-msg.channel.send(`uptime : ${duration}`)
-
-console.log(duration);
-
-  }
+    const args = message.content.slice(prefix.length).trim().split(/ +/)
+    const command = args.shift().toLowerCase();
  
-  })
+   if(command==="play") {
+    execute(message, serverQueue);
+   }
+   if(command==="loop") {
+loop(message, serverQueue)   
+}
+ 
+    async function execute(message, serverQueue){
+        let channel_check = message.member.voice.channel;
+        if(!channel_check){
+            return message.channel.send("Tu doit rejoindre  un salon vocal avant de faire cette commande.");
+        }else{
+           
+            const songInfo = await ytdl.getInfo(args[0])
+ 
+            let song = {
+                title: songInfo.videoDetails.title,
+                url: songInfo.videoDetails.video_url,
+                temps_musique: songInfo.videoDetails.lengthSeconds
+                
+            };
+ 
+            if(!serverQueue){
+                const queueConstructor = {
+                    txtChannel: message.channel,
+                    vChannel: channel_check,
+                    connection: null,
+                    songs: [],
+                    volume: 10,
+                    loop: false,
+                    playing: true
+                };
+                queue.set(message.guild.id, queueConstructor);
+ 
+                queueConstructor.songs.push(song);
+ 
+                try{
+                    let connection = await channel_check.join();
+                    queueConstructor.connection = connection;
+                    play(message.guild, queueConstructor.songs[0]);
+                }catch (err){
+                    console.error(err);
+                    queue.delete(message.guild.id);
+                    return message.channel.send(`error : ${err}`)
+                }
+            }else{
+                serverQueue.songs.push(song);
+                return message.channel.send(`${song.title} a été ajouter à la liste`);
+            }
+        }
+    }
+    async function play(guild, song){
+        const serverQueue = queue.get(guild.id);
+        if(!song){
+         setTimeout(() => {
+                serverQueue.vChannel.leave();   
+            }, 300000); // leave le salon apres 5min sans musique.
+            queue.delete(guild.id);
+            
+            return;
+        }
 
-client.login();  
+        const dispatcher = await serverQueue.connection
+            .play(ytdl(song.url))
+            .on('finish', () =>{
+                if(!serverQueue.loop)serverQueue.songs.shift();
+                play(guild, serverQueue.songs[0]);
+            })
+            const embed = new Discord.MessageEmbed()
+            
+            .setAuthor("Musique en cour : ")
+            .setTitle(`***${serverQueue.songs[0].title}***`)
+                .setURL(`${serverQueue.songs[0].url}`)
+                
+                let playingMessage = await serverQueue.txtChannel.send(embed)
+            
+                // await playingMessage.react("⏹");
+                 
+           serverQueue.connection.on("disconnect", () => queue.delete(guild.id));
+
+
+          
+        }
+        async function loop(message, serverQueue){
+            if(!message.member.voice.channel) return message.channel.send("Tu doit rejoindre  un salon vocal avant de faire cette commande.");
+         if(!serverQueue) return message.channel.send("il 'n'y rien n'a jouer.")
+         serverQueue.loop = !serverQueue.loop;
+         serverQueue.txtChannel.send(`loop ? ${serverQueue.loop ?  `**on**` : `**off**` } `)
+         return
+        }
+        
+
+
+})
+ 
+client.login("token")
