@@ -27,23 +27,35 @@ client.on("message", async(message) => {
     if (!message.content.startsWith(prefix)) return;
     const serverQueue = queue.get(message.guild.id);
  
-    const args = message.content.slice(prefix.length).trim().split(/ +/)
+    const args = message.content.slice(prefix.length).trim().split(/ +/);
     const command = args.shift().toLowerCase();
  
+if(command==="join") {
+    if(!message.member.voice.channel) return message.channel.send("Tu doit rejoindre  un salon vocal avant de faire cette commande.");
+    message.member.voice.channel.join()
+    message.channel.send(`j'ai rejoin le channel ${message.member.voice.channel.name}`);
+}
+
    if(command==="play") {
-    execute(message, serverQueue);
+    leture(message, serverQueue);
    }
    if(command==="loop") {
-loop(message, serverQueue)   
+loop(message, serverQueue);  
 }
- 
-    async function execute(message, serverQueue){
+ if(command==="queue") {
+    liste_queue(serverQueue);
+ }
+ if(command==="skip") {
+    skip_music(message, serverQueue)
+ }
+
+    async function leture(message, serverQueue){
         let channel_check = message.member.voice.channel;
         if(!channel_check){
             return message.channel.send("Tu doit rejoindre  un salon vocal avant de faire cette commande.");
         }else{
            
-            const songInfo = await ytdl.getInfo(args[0])
+            const songInfo = await ytdl.getInfo(args[0]);
  
             let song = {
                 title: songInfo.videoDetails.title,
@@ -73,7 +85,7 @@ loop(message, serverQueue)
                 }catch (err){
                     console.error(err);
                     queue.delete(message.guild.id);
-                    return message.channel.send(`error : ${err}`)
+                    return message.channel.send(`error : ${err}`);
                 }
             }else{
                 serverQueue.songs.push(song);
@@ -104,9 +116,9 @@ loop(message, serverQueue)
             .setTitle(`***${serverQueue.songs[0].title}***`)
                 .setURL(`${serverQueue.songs[0].url}`)
                 
-                let playingMessage = await serverQueue.txtChannel.send(embed)
+                 serverQueue.txtChannel.send(embed);
             
-                // await playingMessage.react("⏹");
+         
                  
            serverQueue.connection.on("disconnect", () => queue.delete(guild.id));
 
@@ -116,13 +128,37 @@ loop(message, serverQueue)
         async function loop(message, serverQueue){
             if(!message.member.voice.channel) return message.channel.send("Tu doit rejoindre  un salon vocal avant de faire cette commande.");
          if(!serverQueue) return message.channel.send("il 'n'y rien n'a jouer.")
-         serverQueue.loop = !serverQueue.loop;
-         serverQueue.txtChannel.send(`loop ? ${serverQueue.loop ?  `**on**` : `**off**` } `)
+         serverQueue.loop =!serverQueue.loop;
+         serverQueue.txtChannel.send(`loop ? ${serverQueue.loop ?  `**on**` : `**off**` } `);
          return
         }
         
+        async function liste_queue(serverQueue) {
+            let music_list = ""
+            for (let i=1; i < serverQueue.songs.length; i++ ) {
+                music_list +=`${i}- **${serverQueue.songs[i].title}** \n`
+            }
+            console.log(serverQueue.songs.length)
+            if(serverQueue.songs.length == 1) return serverQueue.txtChannel.send("Il n'y pas d'autre muique dans la queue")
+            else {
+
+            
+            const embed = new Discord.MessageEmbed()
+            .setAuthor("Actuellement en cours")
+            .setTitle(`***${serverQueue.songs[0].title}***`)
+            .setURL(`${serverQueue.songs[0].url}`)
+            .addField("prochain(s) titre(s) :", `${music_list}`)
+            .setTimestamp();
+            serverQueue.txtChannel.send(embed);
+        }
+        }
+
+       async function skip_music(message, serverQueue) {
+ if(!message.member.voice.channel) return message.channel.send("Tu doit rejoindre  un salon vocal avant de faire cette commande.");
+        }
+    
 
 
 })
  
-client.login("token")
+client.login(token)

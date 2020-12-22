@@ -4,4 +4,5 @@
 - ?join 
 - ?play {Youtube url}
 - ?loop
-- ?pause/?resume/?queue/?np (work to progrsse)
+- ?queue
+- ?pause/?resume/?np (work to progrsse)
