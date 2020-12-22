@@ -1,21 +1,17 @@
 const Discord = require('discord.js');
 const ytdl = require('ytdl-core');
- Discord.Constants.DefaultOptions.ws.properties.$browser = "Discord Android"
-//const { YTSearcher } = require('ytsearcher');
- 
-/*const searcher = new YTSearcher({
-    key: "AIzaSyA3CWSH2xiML9aUqSURM5DlwDUGTjTNLjU",
-    revealed: true
-});*/
- 
 const client = new Discord.Client();
  
 const queue = new Map();
+ Discord.Constants.DefaultOptions.ws.properties.$browser = "Discord Android"
+
+ 
+
 
 client.on('ready', () => {
-    /*console.log(`Logged in as ${client.user.tag}!`);
+    console.log(`Logged in as ${client.user.tag}!`);
 
-client.user.setPresence({ activity: { name: 'with discord.js' }, status: 'idle' })
+/*client.user.setPresence({ activity: { name: 'with discord.js' }, status: 'idle' })
 .then(console.log)
 .catch(console.error);*/
   });
@@ -25,7 +21,9 @@ client.user.setPresence({ activity: { name: 'with discord.js' }, status: 'idle' 
 client.on("message", async(message) => {
     const prefix = '?';
     if (!message.content.startsWith(prefix)) return;
+    if (!message.guild) return;
     const serverQueue = queue.get(message.guild.id);
+
  
     const args = message.content.slice(prefix.length).trim().split(/ +/);
     const command = args.shift().toLowerCase();
@@ -43,10 +41,13 @@ if(command==="join") {
 loop(message, serverQueue);  
 }
  if(command==="queue") {
-    liste_queue(serverQueue);
+    liste_queue(message, serverQueue);
  }
  if(command==="skip") {
-    skip_music(message, serverQueue)
+    skip_music(message, serverQueue);
+ }
+ if(command==="stop") {
+     stop(message, serverQueue);
  }
 
     async function leture(message, serverQueue){
@@ -133,16 +134,16 @@ loop(message, serverQueue);
          return
         }
         
-        async function liste_queue(serverQueue) {
+        async function liste_queue(message, serverQueue) {
+            if(!serverQueue) return  message.channel.send("il n'y a rien n'a jouer.")
             let music_list = ""
             for (let i=1; i < serverQueue.songs.length; i++ ) {
                 music_list +=`${i}- **${serverQueue.songs[i].title}** \n`
             }
             console.log(serverQueue.songs.length)
+
             if(serverQueue.songs.length == 1) return serverQueue.txtChannel.send("Il n'y pas d'autre muique dans la queue")
             else {
-
-            
             const embed = new Discord.MessageEmbed()
             .setAuthor("Actuellement en cours")
             .setTitle(`***${serverQueue.songs[0].title}***`)
@@ -155,7 +156,19 @@ loop(message, serverQueue);
 
        async function skip_music(message, serverQueue) {
  if(!message.member.voice.channel) return message.channel.send("Tu doit rejoindre  un salon vocal avant de faire cette commande.");
-        }
+        
+
+}
+async function stop (message, serverQueue){
+    if(!message.member.voice.channel)
+        return message.channel.send("You need to join the voice chat first!")
+    serverQueue.connection.dispatcher.end();
+    serverQueue.songs =[]
+}
+async function skip_music (message, serverQueue) {
+    if(!message.member.voice.channel) return message.channel.send("Tu doit rejoindre  un salon vocal avant de faire cette commande.");
+    serverQueue.connection.dispatcher.end();
+}
     
 
 
