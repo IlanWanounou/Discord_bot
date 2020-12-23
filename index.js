@@ -154,11 +154,7 @@ loop(message, serverQueue);
         }
         }
 
-       async function skip_music(message, serverQueue) {
- if(!message.member.voice.channel) return message.channel.send("Tu doit rejoindre  un salon vocal avant de faire cette commande.");
-        
 
-}
 async function stop (message, serverQueue){
     if(!message.member.voice.channel)
         return message.channel.send("You need to join the voice chat first!")
