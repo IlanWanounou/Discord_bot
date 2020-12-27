@@ -1,7 +1,7 @@
 const Discord = require('discord.js');
 const ytdl = require('ytdl-core');
 module.exports = {
-	name: 'Play',
+	name: 'play',
 	description: 'Play command.',
 	async execute(message, args) {
 		const queue = message.client.queue;

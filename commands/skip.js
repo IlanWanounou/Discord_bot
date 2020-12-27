@@ -1,5 +1,5 @@
 module.exports = {
-	name: 'Skip',
+	name: 'skip',
 	description: 'Skip a song!',
 	execute(message) {
 		const serverQueue = message.client.queue.get(message.guild.id);
