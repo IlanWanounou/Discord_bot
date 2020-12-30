@@ -8,7 +8,7 @@ module.exports = {
 		const serverQueue = message.client.queue.get(message.guild.id);
         let channel_check = message.member.voice.channel;
         if(!channel_check){
-            return message.channel.send("Tu doit rejoindre  un salon vocal avant de faire cette commande.");
+            return message.channel.send("Tu dois rejoindre  un salon vocal avant de faire cette commande.");
         }else{
            
             const songInfo = await ytdl.getInfo(args[0]);
