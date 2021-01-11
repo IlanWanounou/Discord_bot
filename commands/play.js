@@ -1,4 +1,4 @@
-const Discord = require('discord.js');
+const {MessageEmbed} = require('discord.js');
 const ytdl = require('ytdl-core');
 module.exports = {
 	name: 'play',
@@ -48,7 +48,6 @@ module.exports = {
                 return message.channel.send(`${song.title} a été ajouter à la liste`);
             }
         }
-    let dispatcher;
     async function play(guild, song){
         const serverQueue = queue.get(guild.id);
         if(!song){
@@ -65,17 +64,21 @@ module.exports = {
             .on('finish', () =>{
                 if(!serverQueue.loop)serverQueue.songs.shift();
                 play(guild, serverQueue.songs[0]);
-			})
-			serverQueue.connection.on("disconnect", () => queue.delete(guild.id));
-            const embed = new Discord.MessageEmbed()
+            })
             
-            .setAuthor("Musique en cour : ")
+			serverQueue.connection.on("disconnect", () => queue.delete(guild.id));
+            const embed = new MessageEmbed()
+            
+            .setAuthor("Musique en cour :")
             .setTitle(`***${serverQueue.songs[0].title}***`)
                 .setURL(`${serverQueue.songs[0].url}`)
                 
                  serverQueue.txtChannel.send(embed);
             
-		}
+        }
+        if (message.guild.me.voice.channel) { 
+            message.guild.me.voice.setSelfDeaf(true);
+        };
 	}
 }
 
