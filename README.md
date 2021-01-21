@@ -7,4 +7,6 @@
 - ?queue
 - ?skip
 - ?stop
+- ?mute
+- ?unmute
 - ?pause/?resume/?np (work to progrsse)
