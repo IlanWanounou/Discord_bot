@@ -1,11 +1,12 @@
-const giphy = require( 'giphy' )( token );
-const {MessageEmbed} = require('discord.js')
+const giphy = require('giphy-api')(token);
 module.exports = {
-	name: 'giphy',
-	description: 'envoie un gif',
+    name: 'giphy',
+    description: 'envoie un gif',
     execute(message, args) {
-    if(args[0]) return message.channel.send('Error')
-    
+        giphy.random(args[0]).then(function (res) {
+            message.channel.send(res.data.url);
+            console.log(res);
 
+        });
     }
-    }
+};
