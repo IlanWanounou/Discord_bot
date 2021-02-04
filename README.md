@@ -1,6 +1,6 @@
 # Discord_bot
 
-# Commandes Music bot :
+# Commandes Music  :
 - ?join 
 - ?play {Youtube url}
 - ?loop
@@ -10,3 +10,10 @@
 - ?mute
 - ?unmute
 - ?pause/?resume/?np (work to progrsse)
+
+# Commandes Admin  :
+- ?ban
+- ?kick
+- ?mute
+- ?unmute
+
