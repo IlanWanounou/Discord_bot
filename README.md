@@ -1,5 +1,3 @@
-# Discord_bot
-
 # Commandes Music  :
 - ?join 
 - ?play {Youtube url}
