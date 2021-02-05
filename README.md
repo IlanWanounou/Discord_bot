@@ -16,4 +16,5 @@
 - ?kick
 - ?mute
 - ?unmute
+- ?clear
 
