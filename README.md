@@ -1,18 +1,18 @@
 # Commandes Music  :
-- ?join 
-- ?play {Youtube url}
-- ?loop
-- ?queue
-- ?skip
-- ?stop
-- ?mute
-- ?unmute
-- ?pause/?resume/?np (work to progrsse)
+- /join 
+- /play {Youtube url}
+- /loop
+- /queue
+- /skip
+- /stop
+- /mute
+- /unmute
+- /pause//resume//np (work to progrsse)
 
 # Commandes Admin  :
-- ?ban
-- ?kick
-- ?mute
-- ?unmute
-- ?clear
+- /ban
+- /kick
+- /mute
+- /unmute
+- /clear
 

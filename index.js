@@ -1,7 +1,7 @@
 
 const Discord = require('discord.js');
 const client = new Discord.Client();
-const prefix = '?';
+const prefix = '/';
 client.queue = new Map();
 client.commands = new Discord.Collection();
 const fs = require('fs');
