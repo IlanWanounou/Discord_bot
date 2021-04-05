@@ -2,13 +2,12 @@ const {MessageEmbed} = require('discord.js');
 const ytdl = require('ytdl-core');
 module.exports = {
 	name: 'play',
-	description: 'Play command.',
 	async execute(message, args) {
 		const queue = message.client.queue;
 		const serverQueue = message.client.queue.get(message.guild.id);
-        let channel_check = message.member.voice.channel;
-        if(!channel_check){
-            return message.channel.send("Tu dois rejoindre  un salon vocal avant de faire cette commande.");
+        let channelCheck = message.member.voice.channel;
+        if(!channelCheck){
+            return message.channel.send("Tu dois rejoindre un salon vocal avant de faire cette commande.");
         }else{
            
             const songInfo = await ytdl.getInfo(args[0]);
@@ -16,14 +15,14 @@ module.exports = {
             let song = {
                 title: songInfo.videoDetails.title,
                 url: songInfo.videoDetails.video_url,
-                temps_musique: songInfo.videoDetails.lengthSeconds
+                tempsMusique: songInfo.videoDetails.lengthSeconds
                 
             };
  
             if(!serverQueue){
                 const queueConstructor = {
                     txtChannel: message.channel,
-                    vChannel: channel_check,
+                    vChannel: channelCheck,
                     connection: null,
                     songs: [],
                     volume: 10,
@@ -35,17 +34,17 @@ module.exports = {
                 queueConstructor.songs.push(song);
  
                 try{
-                    let connection = await channel_check.join();
+                    let connection = await channelCheck.join();
                     queueConstructor.connection = connection;
                     play(message.guild, queueConstructor.songs[0]);
                 }catch (err){
                     console.error(err);
                     queue.delete(message.guild.id);
-                    return message.channel.send(`error : ${err}`);
+                    return message.channel.send(`erreur : ${err}`);
                 }
             }else{
                 serverQueue.songs.push(song);
-                return message.channel.send(`${song.title} a été ajouter à la liste`);
+                return message.channel.send(`${song.title} à été ajouter à la liste`);
             }
         }
     async function play(guild, song){
@@ -69,8 +68,8 @@ module.exports = {
 			serverQueue.connection.on("disconnect", () => queue.delete(guild.id));
             const embed = new MessageEmbed()
             
-            .setAuthor("Musique en cour :")
-            .setTitle(`***${serverQueue.songs[0].title}***`)
+            .setAuthor("Musique en cours :")
+            .setTitle(`${serverQueue.songs[0].title}`)
                 .setURL(`${serverQueue.songs[0].url}`)
                 
                  serverQueue.txtChannel.send(embed);
