@@ -15,9 +15,6 @@ module.exports = {
           
            
            const embed = new Discord.MessageEmbed()
-           .setAuthor("Actuellement en cours")
-           .setTitle(`***${serverQueue.songs[0].title}***`)
-           .setURL(`${serverQueue.songs[0].url}`)
            .addField("prochain(s) titre(s) :", `${music_list}`)
            .setTimestamp();
            message.channel.send(embed);
