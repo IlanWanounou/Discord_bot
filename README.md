@@ -7,7 +7,8 @@
 - /stop
 - /mute
 - /unmute
-- /pause//resume//np (work to progrsse)
+- /np
+- /pause//resume/ (work to progrsse)
 
 # Commandes Admin  :
 - /ban
