@@ -51,5 +51,5 @@ client.ws.on("INTERACTION_CREATE", async interaction => {
 client.on('ready', () => console.log('On'));
 
 
-client.login("NzgxOTIwNTE0NDQ4OTQ5MzIw.X8EqOg.gxlQKBAcD--8TGLLHPA-Epdod8k");
+client.login(token);
 
