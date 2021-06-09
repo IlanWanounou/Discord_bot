@@ -14,6 +14,7 @@ module.exports = {
 
 
 		const number = Math.floor(Math.random() * (max - min)) + min;
+		console.log(number)
 
 
 		message.channel.send(`Okay, trouver le nombre entre ${min} et ${max}.`);
@@ -31,7 +32,7 @@ module.exports = {
 			} else if (message.content > number) {
 				message.channel.send("C'est moins.");
 				counter += 1;
-			} else if (message.content == number) {
+			} else if (message.content == number) {2
 				counter += 1;
 				message.channel.send(`Bravo, vous avez gagné en ${counter} coups.`);
 				return collector.stop();

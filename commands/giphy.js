@@ -1,4 +1,4 @@
-const giphy = require('giphy-api')(token);
+/*const giphy = require('giphy-api')(token);
 module.exports = {
     name: 'giphy',
     description: 'envoie un gif',
@@ -10,3 +10,4 @@ module.exports = {
         });
     }
 };
+*/
