@@ -13,29 +13,42 @@ client.ws.on('INTERACTION_CREATE', async interaction => {
         const guild = client.guilds.cache.get(interaction.guild_id)
         const member = guild.members.cache.get(interaction.member.user.id);
         const voiceChannel = member.voice.channel;
-        await voiceChannel.join();
-        /*  client.api.interactions(interaction.id, interaction.token).callback.post({
+        if(!voiceChannel)  {
+            client.api.interactions(interaction.id, interaction.token).callback.post({
               data: {
                   type: 4,
                   data: {
 
-                      content: 'H@cked by y0u$$ et co a ton vocal',
+                      content: 'impossible vous n\'etes pas dans un chanel vocal',
                   }
               }
-          })*/
+          })
+        } else {
+            client.api.interactions(interaction.id, interaction.token).callback.post({
+                data: {
+                    type: 4,
+                    data: {
+
+                        content: `${voiceChannel.name} rejoin`,
+                    }
+                }
+            })
+        }
+        await voiceChannel.join();
     }
 
     if (command === `clear`) {
-      const guild = client.guilds.cache.get(interaction.guild_id);
-      const channel = guild.channels.cache.get(interaction.channel_id);
-        console.log(channel)
-
+        const guild = client.guilds.cache.get(interaction.guild_id)
+        const member = guild.members.cache.get(interaction.member.user.id);
+        const channel = client.channels.cache.get(interaction.channel_id);
+      //  if (member.hasPermission("MANAGE_CHANNELS")) return channel.send("test")
+        channel.bulkDelete(args[0].value)
         client.api.interactions(interaction.id, interaction.token).callback.post({
             data: {
                 type: 4,
                 data: {
                     flags: 64,
-                    content: 'H@cked by y0u$$ et co a ton vocal',
+                    content: 'Message(s) supprimer',
                 }
             }
         })
