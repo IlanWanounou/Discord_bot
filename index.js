@@ -10,7 +10,6 @@ client.on('ready', () => console.log('Connecter !'));
 
 client.login(config.token);
 
-
 const commandFiles = fs
     .readdirSync("./commands")
     .filter((file) => file.endsWith(".js"));
