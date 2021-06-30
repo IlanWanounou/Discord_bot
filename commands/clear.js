@@ -1,14 +1,21 @@
 module.exports = {
-
     name: 'clear',
-    description: "Supprimer dans un channel, le nombre de messages demandé pour l'utilisateur.",
-    execute(message, args) {
-        if (!message.member.hasPermission("MANAGE_CHANNELS")) return message.channel.send(`Tu n'as pas la permission.`);
-        if (!message.guild.me.hasPermission("MANAGE_CHANNELS")) return message.channel.send(`Je n'ai pas la permission.`);
+    execute(interaction, client) {
+        const args = interaction.options.get('nombre').value;
 
-        if (!args[0]) return message.channel.send("Indiquer le nombre de message à supprimer.");
-        if (args[0] > 100) return message.channel.send("La limite maximal est de 100 messages supprimés par commande.");
-        message.channel.bulkDelete(args[0]);
+        const guild = client.guilds.cache.get(interaction.guild.id);
+        const member = guild.members.cache.get(interaction.member.user.id);
+        console.log(member)
+
+
+
+        if (!member.permissions.has('MANAGE_CHANNELS')) return interaction.reply('Tu n\'as pas la permission déso pas déso.')
+        if (!guild.me.permissions.has('MANAGE_CHANNELS')) return interaction.reply(`Je n'ai pas la permission.`);
+
+        interaction.channel.bulkDelete(args)
+        interaction.reply({ content: 'Message(s) supprimer',
+            ephemeral : true}
+    )
 
     }
 }
