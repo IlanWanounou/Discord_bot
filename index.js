@@ -1,12 +1,13 @@
 const {Client, Intents} = require('discord.js');
 const client = new Client({intents: [Intents.ALL]});
 
-const { joinVoiceChannel } = require('@discordjs/voice')
+const { joinVoiceChannel, createAudioPlayer } = require('@discordjs/voice')
 
 const fs = require('fs')
 const config = require('./config');
 
 client.queue = new Map();
+client.player = createAudioPlayer;
 
 client.on('ready', () => console.log('Connecter !'));
 
@@ -26,10 +27,11 @@ try {
         channelId: voiceChannel.id,
         guildId: guild.id,
         adapterCreator: voiceChannel.guild.voiceAdapterCreator,
-        selfDeaf: false,
+        selfDeaf: true,
         selfMute: false,
     });
 }catch (err) {
+    console.error(err)
    return interaction.reply('Vous n\'est pas dans un channel vocal')
 }
     for (const file of commandFiles) {
