@@ -64,12 +64,9 @@ module.exports = {
                 serverQueue.connection.on('disconnect', () => {
                     connection.destroy();
                     queue.delete(interaction.client.queue);
-
                 })
                 return interaction.editReply(`Je joue : ${song.title}`)
             }
-
-
         }
     }
 }
