@@ -1,12 +1,19 @@
 module.exports = {
     name: 'leave',
-    execute(interaction) {
+    execute(interaction)  {
 
         const connection = interaction.client.connection;
-        const queue = interaction.client.queue;
-        connection.destroy();
-        queue.delete(interaction.client.queue);
-        interaction.reply(':pray:');
+
+        if(!connection || connection._state.status==='destroyed') {
+            return interaction.reply('Je suis pas dans un salon vocal.');
+        }
+        else {
+
+            const queue = interaction.client.queue;
+            queue.delete(interaction.client.queue);
+            connection.destroy()
+            return interaction.reply(':pray:');
+        }
     }
 
 }
