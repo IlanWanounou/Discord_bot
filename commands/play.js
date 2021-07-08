@@ -1,9 +1,10 @@
 const {createAudioResource, AudioPlayerStatus} = require('@discordjs/voice');
 const ytdl = require('ytdl-core')
+const {joinC} = require('../utils/joinChannel')
 
 module.exports = {
     name: 'play',
-    async execute(interaction) {
+    async execute(interaction, client) {
         interaction.reply('Je joue : . . . .')
 
         const connection = interaction.client.connection;
@@ -12,12 +13,18 @@ module.exports = {
         const songInfo = await ytdl.getInfo(interaction.options.get('url').value);
         const player = interaction.client.player();
 
+        const guild = client.guilds.cache.get(interaction.guild.id);
+        const member = guild.members.cache.get(interaction.member.user.id);
+        const voiceChannel = member.voice.channel;
+
         let song = {
             title: songInfo.videoDetails.title,
             url: songInfo.videoDetails.video_url,
             tempsMusique: songInfo.videoDetails.lengthSeconds
         };
         if (song.tempsMusique > 10800) return interaction.editReply('Imposible de lancer une musique > 3 heures.');
+        joinC(interaction, guild, voiceChannel)
+
 
         if (!guildQueue) {
             const queueConstructor = {
@@ -40,17 +47,14 @@ module.exports = {
 
         } else {
             console.log(guildQueue.songs)
-
             guildQueue.songs.push(song);
             return interaction.editReply(`${song.title} à été ajouter à la liste`);
         }
 
         function play(song) {
             if (!song) {
-                setTimeout(() => {
-                    connection.destroy();
-                    queue.delete(interaction.client.queue);
-                    }, 300000); // leave le salon apres 5min sans musique.
+                queue.delete(guild.id);
+                connection.destroy();
 
             } else {
                 const serverQueue = queue.get(interaction.guild.id);
