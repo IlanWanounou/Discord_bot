@@ -1,7 +1,20 @@
 const { Client, Intents } = require('discord.js');
-const client = new Client({ intents: [Intents.FLAGS.GUILDS] });
-const { createAudioPlayer } = require('@discordjs/voice');
+const { createAudioPlayer } = require('@discordjs/voice')
+const client = new Client({
+    intents: [
+        Intents.FLAGS.GUILDS,
+        Intents.FLAGS.GUILD_PRESENCES,
+        Intents.FLAGS.GUILD_MESSAGES,
+        Intents.FLAGS.GUILD_MEMBERS,
+        Intents.FLAGS.DIRECT_MESSAGES,
+        Intents.FLAGS.DIRECT_MESSAGE_REACTIONS,
+        Intents.FLAGS.GUILD_EMOJIS_AND_STICKERS,
+        Intents.FLAGS.GUILD_MESSAGE_REACTIONS,
+        Intents.FLAGS.GUILD_VOICE_STATES
+    ],
+});
 const fs = require('fs');
+client.queue = new Map();
 
 const commandFiles = fs
     .readdirSync("./commands")
@@ -26,4 +39,4 @@ client.on('ready', () => {
     console.log(`Logged in as ${client.user.tag}!`);
 })
 
-client.login('NzgxOTIwNTE0NDQ4OTQ5MzIw.X8EqOg.FLMGKVr1rsAsVPa_Yip-vnotvJ8');
+client.login();
