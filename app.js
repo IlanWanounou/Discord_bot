@@ -38,5 +38,6 @@ client.on('interactionCreate', async interaction => {
 client.on('ready', () => {
     console.log(`Logged in as ${client.user.tag}!`);
 })
+require('dotenv').config()
 
-client.login();
+client.login(process.env.token);
