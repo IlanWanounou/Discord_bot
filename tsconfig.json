@@ -1,6 +1,10 @@
 {
   "compilerOptions": {
-    "strict": true,
-    "watch": true
+    "noImplicitAny": true,
+    "target": "es5",
+    "jsx": "react",
+    "watch": true,
+    "allowJs": true,
+    "moduleResolution": "node"
   }
 }
