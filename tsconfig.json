@@ -1,9 +1,8 @@
 {
   "compilerOptions": {
-    "target": "ES2015",
+    "target": "ESNext",
     "watch": true,
-    "moduleResolution" : "Node",
-    "module": "CommonJS"
-
+    "moduleResolution": "node",
+    "module": "CommonJS",
   }
 }
