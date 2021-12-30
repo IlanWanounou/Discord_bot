@@ -1,9 +1,9 @@
-const {joinVoiceChannel} =  require('@discordjs/voice')
-
+const {join} = require('../utils/join');
 module.exports = {
     name: 'join',
     description: 'rejoins le serveur vocal ou est connecter le client.',
     async execute(interaction, client) {
+        client = client.getClient;
         const guild = client.guilds.cache.get(interaction.guild.id);
         const member = guild.members.cache.get(interaction.member.user.id);
         const voiceChannel = member.voice.channel;
@@ -13,13 +13,6 @@ module.exports = {
             join(interaction, guild, voiceChannel)
             interaction.reply(`J'ai rejoin ${voiceChannel.name}`)
         }
-        function join(interaction, guild, voiceChannel) {
 
-            interaction.client.connection = joinVoiceChannel({
-                channelId: voiceChannel.id,
-                guildId: guild.id,
-                adapterCreator: voiceChannel.guild.voiceAdapterCreator,
-            });
-        }
     }
 }
