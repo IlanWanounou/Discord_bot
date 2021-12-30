@@ -1,7 +1,7 @@
-const {createAudioResource, createAudioPlayer, AudioPlayerStatus} = require('@discordjs/voice');
+const {createAudioResource, createAudioPlayer, getVoiceConnection} = require('@discordjs/voice');
 const playYT = require('play-dl');
 
-export async function play(interaction, queueConstructor) {
+export async function play(interaction, queueConstructor, queue) {
     const player = await createAudioPlayer();
     let stream = await playYT.stream(queueConstructor.songs[0].url)
     let resource = await createAudioResource(stream.stream);
@@ -10,7 +10,14 @@ export async function play(interaction, queueConstructor) {
 
     player.addListener("stateChange", (oldS, newS) => {
         if (newS.status == "idle") {
-            console.log("fini");
+            if (!queueConstructor.loop) {
+                queueConstructor.songs.shift();
+            }
+            if (queueConstructor.songs.length == 0) {
+               let connection = getVoiceConnection(interaction.guild.id);
+                connection.destroy();
+                queue.delete(interaction.guild.id);
+            }
         }
     });
-};
+}
