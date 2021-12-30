@@ -17,6 +17,6 @@ client.getClient.on('interactionCreate', async (interaction:ContextMenuInteracti
         }
     }
     if(command !== null) {
-        command.execute(interaction, client.getClient)
+        command.execute(interaction, client)
     }
 })
