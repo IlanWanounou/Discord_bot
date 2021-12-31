@@ -33,7 +33,7 @@ module.exports = {
                 try {
                     let connection = join(interaction, guild, voiceChannel)
                         play(interaction, queueConstructor, queue);
-                        interaction.reply(`Je joue ${queueConstructor.songs[0].title}`)
+                    interaction.reply(`J'ai rejoin ${voiceChannel.name}`)
                 } catch (err) {
                     console.error(err);
                     queue.delete(guild.id);
