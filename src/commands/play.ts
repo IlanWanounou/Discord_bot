@@ -1,4 +1,4 @@
-const {join} = require('../utils/join');
+const joinCommand = require('../utils/join');
 const {play} = require('../utils/play');
 const ytdl = require('ytdl-core');
 const {createAudioPlayer} = require('@discordjs/voice');
@@ -29,15 +29,13 @@ module.exports = {
                 };
                 queue.set(guild.id, queueConstructor);
                 queueConstructor.songs.push(song);
-                join(interaction, guild, voiceChannel)
                 try {
-                    let connection = join(interaction, guild, voiceChannel)
-                        play(interaction, queueConstructor, queue);
-                    interaction.reply(`J'ai rejoin ${voiceChannel.name}`)
+                    joinCommand.join(interaction, guild, voiceChannel);
+                         await play(interaction, queueConstructor, queue);
                 } catch (err) {
                     console.error(err);
                     queue.delete(guild.id);
-                    return interaction.reply(`erreur : ${err}`);
+                  return interaction.reply(`erreur : ${err}`);
                 }
             } else {
                 serverQueue.songs.push(song);

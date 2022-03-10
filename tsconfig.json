@@ -3,12 +3,6 @@
     "target": "ESNext",
     "watch": true,
     "moduleResolution": "node",
-    "module": "CommonJS"
+    "module": "CommonJS",
   },
-  "exclude": [
-    "src/utils/*"
-  ],
-"include": [
-  "src/commands/*"
-]
 }
