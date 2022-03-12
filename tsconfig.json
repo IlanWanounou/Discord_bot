@@ -1,0 +1,8 @@
+{
+  "compilerOptions": {
+    "target": "ESNext",
+    "watch": true,
+    "moduleResolution": "node",
+    "module": "CommonJS",
+  },
+}
