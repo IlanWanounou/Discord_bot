@@ -4,5 +4,7 @@
     "watch": true,
     "moduleResolution": "node",
     "module": "CommonJS",
+    "esModuleInterop": true
   },
+  "exclude" : ["node_modules", "src/script/IntercationCommand.ts"]
 }
