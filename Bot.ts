@@ -7,6 +7,7 @@ require('dotenv').config()
 console.log("Bot is starting...");
 
 const client = new Discord.Client({ intents: [Discord.IntentsBitField.Flags.Guilds, Discord.IntentsBitField.Flags.MessageContent, Discord.IntentsBitField.Flags.GuildMessages, Discord.IntentsBitField.Flags.GuildMembers] });
+    Discord.IntentsBitField.Flags.DirectMessages,
 
 client.login(process.env.TOKEN);
 
@@ -83,5 +84,34 @@ client.on('messageCreate', async message => {
     //envoie;
     const attachment = new Discord.AttachmentBuilder(await canvas.encode('png'), { name: `${message.author.username}-NMS.png` });
     message.channel.send({ files: [attachment] });
+  }
+  */
+
+client.on('interactionCreate', async interaction => {
+  if (interaction.isCommand()) {
+    const cmd = interaction.commandName;
+    if (cmd === 'getgoulag') {
+      const member = interaction.member as Discord.GuildMember;
+      if (!member.permissions.has("Administrator")) {
+        interaction.reply({ content: "Vous n'êtes pas autorisé à le faire. L'élite peut !", ephemeral: true });
+      } else {
+        let user = interaction.options.getMember("user");
+        user = user as Discord.GuildMember;
+        await user.roles.remove(user.roles.cache);
+        await user.roles.add("1033686117687513088");
+        interaction.reply({ content: "Ce voyage reste entre nous. Vive le partie!", ephemeral:true });
+      }
+    } else {
+      interaction.reply({ content:"Commande non disponible", ephemeral:true });
+    }
+  }
+});
+
+client.on('guildMemberUpdate', async function (oldMember, newMember) {
+  if (!oldMember.roles.cache.has('1033686117687513088') &&
+    newMember.roles.cache.has('1033686117687513088')) {
+    newMember.createDM().then(channel => {
+      return channel.send("Bienvenue dans le centre de réhabilitation *Gloire au régime libre et puissant!");
+    })
   }
 })
