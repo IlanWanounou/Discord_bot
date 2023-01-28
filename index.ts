@@ -1,22 +1,32 @@
-import { Connection } from './src/Connection';
-import {ContextMenuInteraction} from 'discord.js';
-import * as fs from 'fs';
+import * as Discord from 'discord.js';
+import * as dotenv from 'dotenv';
+import fs from 'fs';
 
-const files:any = fs.readdirSync('./src/commands').filter((file:string) =>
-    file.endsWith('.ts'));
+const files = fs.readdirSync('./src/commands').filter((file) => file.endsWith('.js'));
 
-let client = new Connection()
-client.Start();
+dotenv.config();
+const client: Discord.Client = new Discord.Client({
+    intents: [Discord.IntentsBitField.Flags.Guilds,
+    Discord.IntentsBitField.Flags.GuildMessages]
+});
 
-client.getClient.on('interactionCreate', async (interaction:ContextMenuInteraction) => {
-    let command = null;
-    for (let file of files) {
-        file=require(`./src/commands/${file}`)
-        if(file.name===interaction.commandName){
-            command=file;
+client.on('ready', () => {
+    console.log(`Logged in as ${(client.user as Discord.User).tag}!`);
+});
+
+
+
+client.on('interactionCreate', async (interaction: Discord.Interaction) => {
+    if (interaction.isCommand() || interaction.isContextMenuCommand()) {
+        let command = null;
+        for (let file of files) {
+            command = require(`./src/commands/${file}`);
+            if (command.name === interaction.commandName) {
+                command?.execute(interaction, client);
+            }
         }
     }
-    if(command !== null) {
-        command.execute(interaction, client)
-    }
-})
+});
+
+
+client.login(process.env.TOKEN);
