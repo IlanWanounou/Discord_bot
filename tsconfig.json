@@ -18,10 +18,11 @@
         ],
         "sourceMap": false,
         "baseUrl": "./"
-    },
+   /* },
     "files": [
         "./Bot.ts"
-    ],
+    ],*/
+    },
     "include": [
         "./**/*.ts"
     ],

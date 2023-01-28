@@ -7,7 +7,8 @@ const files = fs.readdirSync('./src/commands').filter((file) => file.endsWith('.
 dotenv.config();
 const client: Discord.Client = new Discord.Client({
     intents: [Discord.IntentsBitField.Flags.Guilds,
-    Discord.IntentsBitField.Flags.GuildMessages]
+    Discord.IntentsBitField.Flags.GuildMessages,
+    Discord.IntentsBitField.Flags.GuildVoiceStates]
 });
 
 client.on('ready', () => {
